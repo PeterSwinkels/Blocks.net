@@ -26,7 +26,7 @@ Public Module CoreModule
 
    'This structure defines the game's state.
    Public Structure GameStateStr
-      Public GameOver As Boolean       'Defines whether the game has been lost.
+      Public GameOver As Boolean       'Indicates whether the game has been lost.
       Public Pit(,) As Color           'Defines the pit.
       Public PitCanvas As Graphics     'Defines the pit's graphics.
       Public Score As ULong            'Defines the number of rows cleared.
@@ -96,7 +96,7 @@ Public Module CoreModule
                      Exit For
                   End If
                Next PitX
-               If FullRow Then RemoveFullRow(PitY)
+               If FullRow Then RemoveRow(PitY)
             Next PitY
          End With
       Catch ExceptionO As Exception
@@ -104,7 +104,7 @@ Public Module CoreModule
       End Try
    End Sub
 
-   'This procedure checks whether the game has been lost and gives the command to display the status information.
+   'This procedure checks whether the game has been lost and gives the commands to draw the pit and to display the status information.
    Private Sub CheckGameState()
       Try
          GameState.GameOver = (ActiveShape.PitXY.Y < 0)
@@ -203,7 +203,7 @@ Public Module CoreModule
       End Try
    End Sub
 
-   'This procedure draws/erases the specified shape at the specified position on the specified graphical surface.
+   'This procedure draws/erases the active shape.
    Public Sub DrawShape(Optional EraseShape As Boolean = False)
       Try
          Dim PitX As New Integer
@@ -361,8 +361,8 @@ Public Module CoreModule
       End Try
    End Sub
 
-   'This procedure removes the specified full row.
-   Private Sub RemoveFullRow(PitY As Integer)
+   'This procedure removes the specified row.
+   Private Sub RemoveRow(PitY As Integer)
       Try
          With GameState
             For RemovedRow As Integer = PitY To .Pit.GetLowerBound(1) Step -1
